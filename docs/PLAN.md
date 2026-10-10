@@ -398,7 +398,7 @@ Die Releaseabnahme verlangt diesen Nachweis für beide Standardprofile auf beide
 
 Download, Build, Installation und Wartung prüfen Bytes, Inodes und Quoten je betroffenem Dateisystem einschließlich /boot und gegebenenfalls ESP. Spitzenbedarf, parallele Jobs und Reparatur-/Journalreserven werden budgetiert; eigene Reservierungen garantieren keine Kapazität gegenüber fremden Schreibern. Fehlende oder unzureichende Kapazität blockiert vor der jeweiligen Änderung. Messbasierte Standardgrenzen sind vor Build-MVP-Abnahme festzuschreiben.
 
-Temporäre Daten, wiederbeschaffbarer Cache, Reproduktionsarchive und geschützte Systemnachweise haben getrennte Regeln. Aktive Kernel-/Job-/Schlüsselreferenzen verhindern Löschung; Cachebereinigung entfernt keine installierten Kernel oder benötigten Archive. Archivlöschung braucht konkrete Freigabe und ändert den Status verfügbarer Reproduktionsinputs. Details: [Lebenszyklus 3](operations/lifecycle.md), Nachweise F-10 und S-01.
+Temporäre Daten, wiederbeschaffbarer Cache, Reproduktionsarchive und geschützte Systemnachweise haben getrennte Regeln. Aktive Kernel-/Job-/Schlüsselreferenzen verhindern Löschung; Cachebereinigung entfernt keine installierten Kernel oder benötigten Archive. Archivlöschung braucht konkrete Freigabe und ändert den Status verfügbarer Reproduktionsinputs. Details: [Lebenszyklus 3](operations/lifecycle.md), Nachweise F-10 und S-01: S-01a für Build-/Cachebereiche bis Build-MVP, S-01b für Installations-/Wartungsbereiche bis CLI-Verwaltungs-MVP.
 
 ---
 
@@ -496,7 +496,7 @@ Nach der autorisierten Installation werden tatsächliche Ergebnisse geprüft:
 
 Neue Module werden nicht ungefragt in den laufenden Kernel geladen. Fehler verhindern den Übergang zu `InstalledValidated`.
 
-Spätere DKMS-/Treiberupdates benötigen einen separat freigegebenen kernelgebundenen Wartungsplan mit isoliertem Build, geprüftem Signierauftrag und initramfs-Nachkontrolle. Externe APT-/DKMS-Änderungen entwerten betroffene Nachweise; ihre administrativen Hooks sind nicht automatisch durch MyMainline autorisiert. Eine sichere Integration ohne rekursive Paketmanagersperren oder pauschalen Signierzugriff ist Phase-0-Blocker F-09. Ohne diesen Nachweis bleibt die Installation auf betroffenen DKMS-Profilen gesperrt. Schlüssel bleiben für spätere erforderliche Module erhalten; keine Abschaltung der Signaturprüfung. Details: [Lebenszyklus 2](operations/lifecycle.md).
+Spätere DKMS-/Treiberupdates benötigen einen separat freigegebenen kernelgebundenen Wartungsplan mit isoliertem Build, geprüftem Signierauftrag und initramfs-Nachkontrolle. Externe APT-/DKMS-Änderungen entwerten betroffene Nachweise; ihre administrativen Hooks sind nicht automatisch durch MyMainline autorisiert. Die technische Machbarkeit einer Integration ohne rekursive Paketmanagersperren oder pauschalen Signierzugriff ist Phase-0-Blocker F-09. Dieser isolierte Versuch verwendet einen ausdrücklich manuell freigegebenen Schritt; der Nachweis mit realem SystemPlan, polkit und Broker folgt als W-01 in Phase 4. Ohne diesen Nachweis bleibt die Installation auf betroffenen DKMS-Profilen gesperrt. Schlüssel bleiben für spätere erforderliche Module erhalten; keine Abschaltung der Signaturprüfung. Details: [Lebenszyklus 2](operations/lifecycle.md).
 
 ### 4.5 GRUB-Testboot
 
@@ -543,6 +543,8 @@ Neue Hauptserien oder prüfpflichtige Konfigurationsänderungen erzeugen einen F
 Pflegezustand wird getrennt vom Releasekanal mit Quelle und Prüfzeitpunkt geführt. Eine neue Installation ungepflegter Reihen verlangt eine zusätzliche Ausnahme für genau diesen Systemplan; unbekannter/veralteter Status eine konkrete Unsicherheitsfreigabe. Keine Ausnahme umgeht die harten Signatur-, Plattform-, Sicherheits- oder Rückfallbedingungen. Ein vorhandener Rückfallkernel bleibt bei Pflegeende erhalten.
 
 Ein Distributionskernel samt Aktualisierungsmetapaket bleibt dauerhaft zusätzlich geschützt. Eine fehlende Reserve sperrt neue verwaltete Kernelinstallationen, aber nicht Build/Export; Beschaffung erfolgt getrennt mit eigener Freigabe. Die Reserve zählt erst nach Boot-/Funktionsnachweis als KnownGoodKernel. Ein konkreter Plan markiert eindeutig zugeordnete Reservepakete manuell gegen gewöhnliches APT-Autoremove; kein pauschales Hold gegen Updates. Fremde ausdrückliche administrative Entfernung bleibt außerhalb der Garantie. Details und Aktualitätspolitik: [Lebenszyklus 4](operations/lifecycle.md), [ADR 0011](adr/0011-support-distribution.md), P-01.
+
+Wird ein bisheriger Reservenachweis durch relevante externe Änderungen entwertet, bleibt der Paketschutz bestehen. Fehlt anschließend jeder gültige KnownGoodKernel, sperrt der CapabilityReport neue Installationen und Testbootpläne gemäß 4.3. Revalidierung braucht Vorab-Erfassung und Bestätigungsboot. Ein anderer gültiger KnownGoodKernel kann die Rückfallrolle übernehmen; eine vorhandene unbestätigte Distributionsreserve bleibt daneben zulässig. Ob ein Distributionsupdate tatsächlich einen geschützten Dateisatz verändert, wird geprüft und nicht aus der bloßen Aktualisierung des Metapakets abgeleitet.
 
 ### 4.8 Rettung ohne Dienst oder Datenbank
 

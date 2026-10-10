@@ -23,7 +23,21 @@ Offizielle Releaseangaben unterscheiden Stable und Longterm und führen verände
 
 Quellen: [DKMS](https://manpages.debian.org/trixie/dkms/dkms.8.en.html), [apt-mark](https://manpages.debian.org/trixie/apt/apt-mark.8.en.html), [Kernel-Releases](https://www.kernel.org/category/releases.html), [Modulsignierung](https://docs.kernel.org/admin-guide/module-signing.html).
 
-Die konkreten Regeln zur Vorab-Erfassung, Speicherbudgetierung, unabhängigen Rettung und Migration sind Projektentscheidungen. Ihre Machbarkeit und Vollständigkeit müssen [Validierung](../validation.md) und ein unabhängiges Architekturreview erst belegen. Ein späteres gezieltes Dokumentationsreview dieser Ergänzungen ersetzt dieses Architekturreview nicht.
+Die konkreten Regeln zur Vorab-Erfassung, Speicherbudgetierung, unabhängigen Rettung und Migration sind Projektentscheidungen. Ihre Machbarkeit und Vollständigkeit müssen [Validierung](../validation.md) und ein unabhängiges Architekturreview erst belegen. Das nachfolgend dokumentierte gezielte Dokumentationsreview dieser Ergänzungen ersetzt dieses Architekturreview nicht.
+
+## Gezieltes externes Dokumentationsreview
+
+Am 10. Oktober 2026 prüfte opencode-go/step-5-preview-free die sechs Ergänzungen anhand des Dokumentationsstands im Commit 75c295a. Übergeben wurden die betroffenen Dokumente; der Auftrag erlaubte nur einen Bericht, keine Werkzeugaufrufe oder Datei-/Systemänderungen. Nach Fortsetzung der Sitzung liegt ein abgeschlossener Bericht vor. Die folgenden Bewertungen unterscheiden Reviewerbefund und anschließende Gegenprüfung.
+
+| Reviewerbefund | Bewertung und Änderung |
+| --- | --- |
+| Mittel: S-01 verlangt Installations-/Bootspeichertests bereits zum Build-MVP | Übernommen. S-01a betrifft Build-/Cachebereiche bis Phase 2; S-01b tatsächliche Installations-/Wartungsbereiche bis Phase 4. Erst beide Teilnachweise ergeben S-01 |
+| Mittel: Eine vorhandene Reserve mit entwertetem Funktionsnachweis sei nicht geregelt | Als neue Sicherheitslücke nicht bestätigt: Plan 4.3 sperrt bereits Installation/Testboot ohne gültigen KnownGoodKernel; Reserve und Rückfall sind ausdrücklich getrennte Rollen. Präzisiert wurden Sperrgrund und Revalidierung. Eine unbestätigte Reserve bleibt bei anderer gültiger Rückfallmöglichkeit zulässig |
+| Niedrig: F-09 setze vorzeitig SystemPlan/polkit voraus | Übernommen. Phase 0 erprobt den isolierten technischen Ablauf mit ausdrücklich manueller Freigabe; die echte Autorisierung/Brokerintegration folgt mit W-01 in Phase 4 |
+
+Die Annahme, jedes Distributionsupdate ersetze Dateien aller installierten Kernel, wird nicht übernommen. Maßgeblich ist der tatsächlich betroffene Dateisatz; ein zusätzlich installierter Distributionskernel oder ein aktualisiertes Metapaket entwertet nicht automatisch den alten Nachweis. P-01 prüft die Fälle mit und ohne verbleibenden KnownGoodKernel.
+
+Dies war ein gezieltes unabhängiges Dokumentationsreview, kein vollständiges Architekturreview F-08 und kein Kernel-/VM-Nachweis. Die daraus vorgenommenen Präzisierungen wurden anschließend lokal auf Konsistenz geprüft; eine erneute externe Prüfung des korrigierten Stands ist damit nicht behauptet.
 
 ## Navigation
 

@@ -50,4 +50,4 @@ Jeder zukünftige Prüfbericht benennt Quellrelease, vollständige Fingerprints,
 
 ## Ergänzende verbindliche Nachweise
 
-[Planprüfung](research/plan-review.md) und [Betriebsregeln](operations/lifecycle.md) ordnen die Ergänzungen den Nachweisen zu: F-09/F-10 in Phase 0, S-01 bis Build-MVP, B-01/W-01/R-01/P-01 bis CLI-Verwaltungs-MVP und A-01 spätestens vor Freigabe der Anwendungspakete. Schema-/Policywechsel werden bereits im Systembroker berücksichtigt. Alle Nachweise sind offen; sie erweitern keine Freigabe für produktive Tests.
+[Planprüfung](research/plan-review.md) und [Betriebsregeln](operations/lifecycle.md) ordnen die Ergänzungen den Nachweisen zu: F-09/F-10 als isolierte Verfahrensnachweise in Phase 0, S-01a für Build-/Cachebereiche bis Build-MVP, S-01b für Installations-/Wartungsbereiche zusammen mit B-01/W-01/R-01/P-01 bis CLI-Verwaltungs-MVP und A-01 spätestens vor Freigabe der Anwendungspakete. Schema-/Policywechsel werden bereits im Systembroker berücksichtigt. Alle Nachweise sind offen; sie erweitern keine Freigabe für produktive Tests.
