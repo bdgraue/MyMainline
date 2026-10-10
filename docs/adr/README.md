@@ -1,6 +1,6 @@
 # Architekturentscheidungen
 
-Stand: 9. Oktober 2026. **Status aller Einträge: vereinbarter Entwurf; Umsetzung und technische Nachweise stehen aus.** Ein unabhängiges Architekturreview steht ebenfalls aus. Die Nummerierung dient der Nachverfolgbarkeit und ist keine Freigabe bereits implementierter Verfahren.
+Stand: 10. Oktober 2026. **Status aller Einträge: vereinbarter Entwurf; Umsetzung und technische Nachweise stehen aus.** Ein unabhängiges Architekturreview steht ebenfalls aus. Die Nummerierung dient der Nachverfolgbarkeit und ist keine Freigabe bereits implementierter Verfahren.
 
 Der [vollständige Plan](../PLAN.md) bleibt die zusammenhängende Spezifikation. Diese Protokolle halten Kontext, Entscheidung und Folgen fest. Änderungen am Plan müssen betroffene Protokolle, Risiken und Prüfungen mit aktualisieren.
 
@@ -16,3 +16,5 @@ Der [vollständige Plan](../PLAN.md) bleibt die zusammenhängende Spezifikation.
 | [0008 – Konservative Profile und spätere individuelle Optimierungen](0008-config-profiles.md) | Konservative Profile und spätere individuelle Optimierungen |
 | [0009 – Präziser Reproduktionsumfang und unveränderliche Identitäten](0009-reproducibility.md) | Präziser Reproduktionsumfang und unveränderliche Identitäten |
 | [0010 – Fähigkeiten prüfen und Plattformumfang begrenzen](0010-platform-scope.md) | Fähigkeiten prüfen und Plattformumfang begrenzen |
+| [0011 – Pflegezustand und erhaltene Distributionsreserve](0011-support-distribution.md) | Konkrete Supportausnahmen und dauerhaft erhaltener Distributionskernel mit Aktualisierungsmetapaket |
+| [0012 – Unabhängige Rettungsnachweise und Anwendungsmigration](0012-recovery-lifecycle.md) | Rettung außerhalb SQLite, ruhende Migrationsgrenze und sichere Anwendungspflege |

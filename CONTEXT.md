@@ -19,7 +19,10 @@ Dieses Dokument definiert die Begriffe der geplanten Anwendung. Architektur und 
 | Freigabe | Ausdrückliche Zustimmung zu den konkreten Auswirkungen eines Systemplans; keine pauschale Zustimmung zu späteren Aktionen |
 | Kernelinventar | Beobachtete installierte Kernel, Paketzuordnungen, Dateien und Schutzrollen |
 | BootObservation | Beobachteter Start mit Bootkennung und Kernelidentität |
-| KnownGoodKernel | Technisch zugeordneter Kernel mit erfolgreicher Bootbeobachtung und Benutzerbestätigung wesentlicher Funktionen |
+| KnownGoodKernel | Technisch zugeordneter Kernel mit vor dem Bestätigungsboot erfasstem unverändertem Bootdateisatz, passender Bootbeobachtung und Benutzerbestätigung wesentlicher Funktionen |
+| Bootdateisatz | Identifizierte Dateien und Bootzuordnung, deren unveränderter Zustand einen konkreten Bestätigungsboot mit dem später erreichbaren Kernel verbindet |
+| Distributionsreserve | Zusätzlich erhaltener Distributionskernel mit seinem Aktualisierungsmetapaket; ohne eigenen Funktionsnachweis noch kein bestätigter Rückfallkernel |
+| Supportstatus | Mit Quelle und Prüfzeitpunkt belegter Pflegezustand einer Kernelreihe; getrennt von Herkunft und Releasekanal |
 | Rückfallkernel | Bestätigter funktionierender Kernel, der bei einem fehlgeschlagenen Test weiterhin erreichbar bleibt |
 | Testboot | Separat freigegebener einmaliger Start eines validierten Kandidaten, während der sichere Standard erhalten bleibt |
 | Dauerhafte Übernahme | Separat freigegebener Wechsel des dauerhaften Bootstandards nach beobachtetem und bestätigtem Test |

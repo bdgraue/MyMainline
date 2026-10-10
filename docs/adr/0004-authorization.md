@@ -1,6 +1,6 @@
 # 0004 – Zustandsgebundene Freigabe und Terminalauthentifizierung
 
-Status: vereinbarter Entwurf, noch nicht implementiert. Stand: 9. Oktober 2026.
+Status: vereinbarter Entwurf, noch nicht implementiert. Stand: 10. Oktober 2026.
 
 ## Kontext
 
@@ -17,3 +17,7 @@ CLI/TUI registrieren bei Bedarf einen textuellen pkttyagent, binden ihn an die e
 ## Grundlagen
 
 [Plan: Autorisierung und CLI](../PLAN.md), [polkit](https://polkit.pages.freedesktop.org/polkit/polkit.8.html), [pkttyagent](https://polkit.pages.freedesktop.org/polkit/pkttyagent.1.html).
+
+## Ergänzende Planbindungen
+
+Wartung, Reservebeschaffung/-markierung und Archivlöschung haben jeweils konkrete Pläne. Supportbeobachtung und eine gegebenenfalls nötige EOL-/Unsicherheitsausnahme gehören zur Installationsfreigabe; sie umgehen keine harten Schutzbedingungen. Speicherprüfung und relevante Broker-/Policyversion werden erneut geprüft. Ein Policywechsel kann vorbereitete Freigaben entwerten. [Betriebsregeln](../operations/lifecycle.md).

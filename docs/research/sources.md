@@ -38,3 +38,11 @@ Die Referenzen dienen zur Stackauswahl. Konkrete Versionen, APIs, minimale Rust-
 - [Ratatui](https://ratatui.rs/), [Crossterm](https://docs.rs/crossterm/latest/crossterm/).
 - [CXX-Qt](https://kdab.github.io/cxx-qt/book/), [CXX-Qt-Quellcode](https://github.com/KDAB/cxx-qt), [Qt Quick Controls](https://doc.qt.io/qt-6/qtquickcontrols-index.html).
 - [gtk-rs / GTK 4](https://gtk-rs.org/gtk4-rs/stable/latest/docs/gtk4/).
+
+## Ergänzende Betriebsrecherche vom 10. Oktober 2026
+
+- [Offizielle Release-/Pflegeübersicht](https://www.kernel.org/category/releases.html): Pflegezustand und veränderliche Longterm-Zeiträume.
+- [apt-mark](https://manpages.debian.org/trixie/apt/apt-mark.8.en.html): manuelle Markierung gegen gewöhnliches Autoremove; Hold ist eine andere Wirkung.
+- [DKMS](https://manpages.debian.org/trixie/dkms/dkms.8.en.html): Modul-/Signierabläufe; die sichere Integration unseres Signierers bleibt eigener offener Nachweis.
+
+[Herleitung der Ergänzungen](plan-review.md) trennt diese Quellenbefunde von den daraus gewählten Projektregeln.

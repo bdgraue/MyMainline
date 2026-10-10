@@ -1,6 +1,6 @@
 # 0007 – Getrennte Modulsignierung und expliziter Schlüssellebenszyklus
 
-Status: vereinbarter Entwurf, noch nicht implementiert. Stand: 9. Oktober 2026.
+Status: vereinbarter Entwurf, noch nicht implementiert. Stand: 10. Oktober 2026.
 
 ## Kontext
 
@@ -17,3 +17,7 @@ Pro neuer Rezeptidentität ein Modulschlüsselpaar; nur das öffentliche Zertifi
 ## Grundlagen
 
 [Plan: Modulsignierung](../PLAN.md), [Upstream-Reproduzierbarkeit](https://docs.kernel.org/kbuild/reproducible-builds.html), [Modulsignierung](https://docs.kernel.org/admin-guide/module-signing.html).
+
+## Spätere Module
+
+Der Schlüsselbezug gilt auch für spätere Treiberupdates: separat freigegebener Wartungsplan, endgültige Header, isolierter Modulbuild, geprüfte Übergabe, kernelgebundener Signierer und initramfs-Nachkontrolle. Externe APT-/DKMS-Vorgänge bekommen keinen pauschalen Signierzugriff. Ihre Änderungen entwerten betroffene Nachweise. Sichere Hook-/Sperrkooperation ist Phase-0-Blocker F-09; ohne Nachweis bleibt die Installation auf betroffenen DKMS-Profilen gesperrt. [Lebenszyklus 2](../operations/lifecycle.md), W-01.

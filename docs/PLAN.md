@@ -1,6 +1,6 @@
 # MyMainline – Architektur, Sicherheitsentscheidungen und Implementierungsroadmap
 
-Stand: 9. Oktober 2026. Status: vereinbarter Entwurf, noch nicht implementiert. Machbarkeitsnachweise und unabhängiges Architekturreview stehen aus.
+Stand: 10. Oktober 2026. Status: vereinbarter Entwurf, noch nicht implementiert. Machbarkeitsnachweise und unabhängiges Architekturreview stehen aus.
 
 Navigation: [Projektübersicht](../README.md) · [Recherche](research/README.md) · [Entscheidungen](adr/README.md) · [Prüfmatrix](validation.md) · [Roadmap](ROADMAP.md).
 
@@ -162,7 +162,9 @@ Ein `SystemPlan` bindet:
 - Relevanten Paket- und Bootzustand.
 - Erwartete Änderungen.
 - Rückfallkernel.
-- Sicherheitsregeln.
+- Sicherheitsregeln, aktuelle Supportbeobachtung und gegebenenfalls konkrete Ausnahme.
+- Speicherprüfung, Reserven und betroffene Aufbewahrungsreferenzen.
+- Relevante Broker-/Policyversion.
 - Ablaufzeit und Planhash.
 
 Pläne sind 15 Minuten gültig, einmalig ausführbar und werden unmittelbar vor Ausführung erneut geprüft. Ein bereits gestarteter Vorgang wird durch den Ablauf dieser Frist nicht abgebrochen.
@@ -234,7 +236,7 @@ Vorgesehener Namensraum: `io.github.bdgraue.MyMainline`, mit versionierten D-Bus
 | `ArtifactSet` | Geprüfte Pakete und zugehörige Nachweise |
 | `SystemPlan` | Konkrete, zeitlich begrenzte Änderung des Zielsystems |
 | `BootObservation` | Beobachteter Start mit Bootkennung und Kernelidentität |
-| `KnownGoodKernel` | Technisch zugeordneter und vom Benutzer bestätigter funktionierender Kernel |
+| `KnownGoodKernel` | Kernel mit vorab erfasstem unverändertem Bootdateisatz, passendem Bestätigungsboot und Benutzerfunktionstest |
 | `CapabilityReport` | Unterstützte Aktionen einschließlich nachvollziehbarer Sperrgründe |
 | `OperationError` | Stabiler Fehlercode, Kontext und möglicher nächster Schritt |
 
@@ -392,6 +394,12 @@ Auf dem Zielsystem erzeugte initramfs-Dateien und später hinzugefügte DKMS-Mod
 
 Die Releaseabnahme verlangt diesen Nachweis für beide Standardprofile auf beiden Distributionen. Für individuelle Rezepte gibt es eine eigene Reproduktionsoperation; ohne deren erfolgreichen Lauf erscheint kein „reproduziert“-Status.
 
+### 3.7 Speicherprüfung und Aufbewahrung
+
+Download, Build, Installation und Wartung prüfen Bytes, Inodes und Quoten je betroffenem Dateisystem einschließlich /boot und gegebenenfalls ESP. Spitzenbedarf, parallele Jobs und Reparatur-/Journalreserven werden budgetiert; eigene Reservierungen garantieren keine Kapazität gegenüber fremden Schreibern. Fehlende oder unzureichende Kapazität blockiert vor der jeweiligen Änderung. Messbasierte Standardgrenzen sind vor Build-MVP-Abnahme festzuschreiben.
+
+Temporäre Daten, wiederbeschaffbarer Cache, Reproduktionsarchive und geschützte Systemnachweise haben getrennte Regeln. Aktive Kernel-/Job-/Schlüsselreferenzen verhindern Löschung; Cachebereinigung entfernt keine installierten Kernel oder benötigten Archive. Archivlöschung braucht konkrete Freigabe und ändert den Status verfügbarer Reproduktionsinputs. Details: [Lebenszyklus 3](operations/lifecycle.md), Nachweise F-10 und S-01.
+
 ---
 
 ## 4. Installation, Wiederherstellung und Bootwechsel
@@ -454,19 +462,19 @@ Folgende Eigenschaften werden getrennt geführt:
 - Technisch vollständig.
 - Vom Benutzer als funktionsfähig bestätigt.
 
-Bei der ersten Einrichtung kann nur der aktuell laufende Kernel unmittelbar als erster Rückfallkandidat bestätigt werden. Erforderlich sind:
+Bei der ersten Einrichtung ist der aktuell laufende Kernel zunächst nur ein Rückfallkandidat. Der Nachweis benötigt einen geschützten, vor dem Bestätigungsboot erfassten Dateisatz und danach einen passenden neuen Boot mit Funktionsbestätigung. Ohne eine solche Vorab-Erfassung genügt die aktuelle Sitzung nicht; der Benutzer startet den Kandidaten ausdrücklich über den bestehenden geprüften Bootpfad erneut. Dieser erste Bestätigungsboot setzt weder eine neue Kernelinstallation noch einen bereits vorhandenen MyMainline-Rückfallnachweis voraus. Erforderlich sind:
 
 - Eindeutige Zuordnung zu installierten Paketen.
 - Vollständige Image-, Modul- und initramfs-Dateien.
 - Passender Bootloadereintrag.
-- Erfolgreicher aktueller Start.
+- Erfolgreicher neuer Start mit passender Vorab-Erfassung und unveränderten relevanten Dateien.
 - Bestätigung wesentlicher Funktionen durch den Benutzer.
 
 Die Bestätigung umfasst mindestens Anmeldung, Anzeige, Massenspeicher und benötigte Netzwerk-/Zusatztreiber. Suspend und weitere Funktionen werden als zusätzliche, getrennte Prüfpunkte geführt.
 
 Weicht der bisherige Standard vom bestätigten Rückfallkernel ab, muss zunächst ein eigener Plan einen sicheren Standard herstellen. Erst danach beginnt eine neue Kernelinstallation.
 
-Ein `KnownGoodKernel` bindet Paketversionen, Dateihashes, Bootloadereintrag, Bootbeobachtung und Benutzerbestätigung. Relevante Änderungen machen den Nachweis erneut prüfpflichtig.
+Ein `KnownGoodKernel` bindet Paketversionen, Dateihashes, Bootloadereintrag, Bootbeobachtung und Benutzerbestätigung. Relevante Änderungen entwerten den betroffenen Nachweis und abhängige Pläne. Gültige vorhandene Nachweise können nach Zustandsprüfung weiterverwendet werden. Die Beobachtung ist keine Attestierung des RAM-Inhalts. Build, Export und gezielte Reparatur bleiben ohne gültigen Nachweis möglich; neue Installationen und Testbootpläne nicht. Details: [Lebenszyklus 1](operations/lifecycle.md).
 
 ### 4.4 DKMS, Header und initramfs
 
@@ -487,6 +495,8 @@ Nach der autorisierten Installation werden tatsächliche Ergebnisse geprüft:
 - Rückfallkernel weiterhin vollständig und erreichbar.
 
 Neue Module werden nicht ungefragt in den laufenden Kernel geladen. Fehler verhindern den Übergang zu `InstalledValidated`.
+
+Spätere DKMS-/Treiberupdates benötigen einen separat freigegebenen kernelgebundenen Wartungsplan mit isoliertem Build, geprüftem Signierauftrag und initramfs-Nachkontrolle. Externe APT-/DKMS-Änderungen entwerten betroffene Nachweise; ihre administrativen Hooks sind nicht automatisch durch MyMainline autorisiert. Eine sichere Integration ohne rekursive Paketmanagersperren oder pauschalen Signierzugriff ist Phase-0-Blocker F-09. Ohne diesen Nachweis bleibt die Installation auf betroffenen DKMS-Profilen gesperrt. Schlüssel bleiben für spätere erforderliche Module erhalten; keine Abschaltung der Signaturprüfung. Details: [Lebenszyklus 2](operations/lifecycle.md).
 
 ### 4.5 GRUB-Testboot
 
@@ -519,6 +529,7 @@ Innerhalb von MyMainline bleiben geschützt:
 - Dauerhafter Standardkernel.
 - Bestätigter Rückfallkernel.
 - Ausstehender Testkernel.
+- Distributionsreserve mit zugehörigem Aktualisierungsmetapaket.
 - Erforderliche Metapakete und Abhängigkeiten.
 
 Unklare Paketzuordnungen verhindern die Entfernung. Es gibt kein allgemeines Autoremove und keine automatische Kernellöschung. Externe Paketmanager bleiben unabhängig; ihre Änderungen werden beim nächsten Zustandsabgleich berücksichtigt.
@@ -526,6 +537,24 @@ Unklare Paketzuordnungen verhindern die Entfernung. Es gibt kein allgemeines Aut
 Versionsprüfung erfolgt standardmäßig täglich und ist abschaltbar. Automatische Builds sind zunächst deaktiviert und werden an eine freigegebene Serie, Plattform und Profilpolitik gebunden.
 
 Neue Hauptserien oder prüfpflichtige Konfigurationsänderungen erzeugen einen Freigabebedarf. Autobuilds führen niemals zu automatischer Installation, Bootumschaltung oder Neustart.
+
+### 4.7 Supportstatus und Distributionsreserve
+
+Pflegezustand wird getrennt vom Releasekanal mit Quelle und Prüfzeitpunkt geführt. Eine neue Installation ungepflegter Reihen verlangt eine zusätzliche Ausnahme für genau diesen Systemplan; unbekannter/veralteter Status eine konkrete Unsicherheitsfreigabe. Keine Ausnahme umgeht die harten Signatur-, Plattform-, Sicherheits- oder Rückfallbedingungen. Ein vorhandener Rückfallkernel bleibt bei Pflegeende erhalten.
+
+Ein Distributionskernel samt Aktualisierungsmetapaket bleibt dauerhaft zusätzlich geschützt. Eine fehlende Reserve sperrt neue verwaltete Kernelinstallationen, aber nicht Build/Export; Beschaffung erfolgt getrennt mit eigener Freigabe. Die Reserve zählt erst nach Boot-/Funktionsnachweis als KnownGoodKernel. Ein konkreter Plan markiert eindeutig zugeordnete Reservepakete manuell gegen gewöhnliches APT-Autoremove; kein pauschales Hold gegen Updates. Fremde ausdrückliche administrative Entfernung bleibt außerhalb der Garantie. Details und Aktualitätspolitik: [Lebenszyklus 4](operations/lifecycle.md), [ADR 0011](adr/0011-support-distribution.md), P-01.
+
+### 4.8 Rettung ohne Dienst oder Datenbank
+
+Ein versioniertes rootgeschütztes Rettungsmanifest und Journal außerhalb SQLite halten Datei-/Paketidentitäten, relevante Bootkonfiguration sowie Absichten und Ergebnisse fest. Sie sind ohne GUI, Dienst oder D-Bus lesbar. Reparatur vergleicht Nachweise mit dem tatsächlichen Systemzustand, beschränkt sich auf konkrete freigegebene Änderungen und überschreibt keine fremde Bootkonfiguration blind. Private Schlüssel fehlen in normalen Exporten.
+
+Der [Rettungsentwurf](operations/rescue.md) ist noch keine freigegebene Befehlsfolge. Standalone-Auswertung und Offline-Live-Rettung müssen vor Installationsfreigabe in VMs nachgewiesen sein: R-01, [ADR 0012](adr/0012-recovery-lifecycle.md).
+
+### 4.9 Anwendung aktualisieren und entfernen
+
+Schema, Journal-/Manifestformat und Dienstprotokolle sind versioniert. Unbekannte oder inkompatible Versionen sperren Änderungen; relevante Broker-/Policywechsel entwerten vorbereitete Pläne. Migration beginnt nur an einer ruhenden überprüften Transaktionsgrenze mit dauerhafter Sicherung. Laufende Paketoperationen werden nicht beendet oder dupliziert. Downgrade oder Datenbankrückspielung ersetzt keinen Abgleich mit dem wirklichen Paket-/Bootzustand.
+
+Entfernung oder Purge der Anwendung löscht keine installierten Kernel, benötigten Bootmöglichkeiten, Schlüssel oder Rettungsdaten. Deren Zugriffsschutz muss entfernte oder wiedervergebene Dienstkennungen überstehen. Wegfall des Signierers und Wiederherstellungsweg werden vor Entfernung angezeigt. Private Schlüsselsicherung ist ein eigener geschützter Vorgang. Anwendungspakete und unabhängige Rettung benötigen A-01/R-01 vor Freigabe. Details: [Lebenszyklus 5–6](operations/lifecycle.md), [ADR 0012](adr/0012-recovery-lifecycle.md).
 
 ---
 
@@ -582,19 +611,19 @@ MyMainline/
     └── development/
 ```
 
-`CONTEXT.md` enthält das fachliche Glossar. Die sechs Sicherheitsentscheidungen werden als Architekturentscheidungen dokumentiert. Quellen, Rootfs-Abbilder, Schlüssel und Buildausgaben liegen außerhalb des Repositorys.
+`CONTEXT.md` enthält das fachliche Glossar. Sicherheits- und Betriebsentscheidungen werden als Architekturentscheidungen dokumentiert. Quellen, Rootfs-Abbilder, Schlüssel und Buildausgaben liegen außerhalb des Repositorys.
 
 ### Implementierungsphasen
 
 | Phase | Liefergegenstand | Verbindliche Abnahme |
 |---|---|---|
-| **0 – Machbarkeitsnachweise** | Unterstützte Kernel-/Toolchainkombination, Zertifikatsbeschaffung, kontrollierte Paketierung, getrennte Signierung, Headeraufbereitung, Toolkit-Builds | Verfahren für Ubuntu und Debian isoliert nachgewiesen; ungeklärte Voraussetzungen als echte Blocker ausgewiesen |
-| **1 – Domäne, Quellen und CLI** | Modelle, Zustände, Katalog, Schlüsselbund, Downloadprüfung, Rezeptverwaltung | Manipulierte Quellen abgelehnt; Rezepte und Fehler reproduzierbar geprüft |
-| **2 – Build-MVP** | Rootfs, Sandbox, Ressourcensteuerung, Kbuild, Prüf-/Paketierungsschritt, Signierer, Export | Image, Module und verwendbare Header ohne Host-Bootänderung erzeugt; Reproduktionsoperation funktioniert |
-| **3 – Systembroker** | D-Bus, polkit, Terminalagent, geschützte Pläne, Inventar, Sperren, Transaktionsjournal | Keine ungeplanten Rootoperationen; Autorisierung und Konkurrenzfälle in VMs bestanden |
-| **4 – Installations- und Boot-MVP** | DKMS, initramfs, Installation, Recovery, Testboot und Standardwechsel | Erfolgs-, Teilfehler-, Reset- und Rückfalltests auf beiden Distributionen bestanden |
+| **0 – Machbarkeitsnachweise** | Unterstützte Kernel-/Toolchainkombination, Zertifikatsbeschaffung, kontrollierte Paketierung, getrennte Signierung, Headeraufbereitung, Toolkit-Builds, späterer DKMS-Wartungspfad und gemessene Speicherbudgets (F-09/F-10) | Verfahren für Ubuntu und Debian isoliert nachgewiesen; ungeklärte Voraussetzungen als echte Blocker ausgewiesen |
+| **1 – Domäne, Quellen und CLI** | Modelle, Zustände, Katalog mit belegtem Supportstatus, Schlüsselbund, Downloadprüfung, Rezeptverwaltung | Manipulierte Quellen abgelehnt; Rezepte und Fehler reproduzierbar geprüft |
+| **2 – Build-MVP** | Rootfs, Sandbox, Ressourcen-/Speicherbudgets, Aufbewahrung, Kbuild, Prüf-/Paketierungsschritt, Signierer, Export | Image, Module und verwendbare Header ohne Host-Bootänderung erzeugt; Reproduktionsoperation funktioniert |
+| **3 – Systembroker** | D-Bus, polkit, Terminalagent, geschützte Pläne, Inventar, Sperren, versioniertes Journal/Rettungsmanifest außerhalb SQLite und Migrationsverträge | Keine ungeplanten Rootoperationen; Autorisierung und Konkurrenzfälle in VMs bestanden |
+| **4 – Installations- und Boot-MVP** | DKMS einschließlich späterer Updates, initramfs, Erstbestätigung, Distributionsreserve, Installation, unabhängige Rettung, Testboot und Standardwechsel | Erfolgs-, Teilfehler-, Reset- und Rückfalltests auf beiden Distributionen bestanden |
 | **5 – Weitere Clients** | TUI, Qt und GTK | Gemeinsame Kernabläufe, Wiederverbindung und Clientwechsel bestanden |
-| **6 – v0.1-Abnahme** | Getrennte Anwendungspakete, Dokumentation, Automatisierung, vollständige Prüfmatrix | Alle Releasekriterien erfüllt; keine offene kritische Sicherheitslücke |
+| **6 – v0.1-Abnahme** | Getrennte Anwendungspakete mit geprüfter Migration/Entfernung, Betriebs-/Rettungsdokumentation, Automatisierung, vollständige Prüfmatrix | Alle Releasekriterien erfüllt; keine offene kritische Sicherheitslücke |
 
 Nach Phase 2 existiert ein Build-MVP. Nach Phase 4 existiert ein CLI-Verwaltungs-MVP. v0.1 enthält alle vier Clients.
 
@@ -635,7 +664,7 @@ Die Mindestmatrix umfasst BIOS und UEFI mit deaktiviertem Secure Boot. Zusätzli
 
 Jede Plattform muss nachweisen:
 
-1. Ausgangskernel erfassen und als funktionsfähig bestätigen.
+1. Ausgangskernel vor Bestätigungsboot erfassen, danach unveränderte Dateien und wesentliche Funktionen bestätigen.
 2. Verifizierten Kernel bauen und geprüfte Pakete installieren.
 3. Header und DKMS praktisch verwenden.
 4. initramfs und Bootloadereinträge prüfen.
@@ -649,6 +678,8 @@ Jede Plattform muss nachweisen:
 12. Nach fehlgeschlagener Installation keinen unsicheren numerischen Standard wiederherstellen.
 
 Fehlerhafte Pakete und nicht bootfähige Kernel werden ausschließlich in diesen VMs erprobt.
+
+Die ergänzenden Pflichtnachweise B-01, W-01, S-01, R-01, P-01 und A-01 stehen in der [Validierung](validation.md). Sie umfassen spätere Treiberupdates, Speicherengpässe, Rettung ohne Anwendung, Pflegeende/Reserve und Anwendungsupgrade/-entfernung. Auch diese Nachweise sind auf beiden Distributionen erforderlich.
 
 ### Reproduzierbarkeitsabnahme
 
@@ -694,6 +725,7 @@ v0.1 ist freigabefähig, wenn sämtliche definierten Standardabläufe auf Ubuntu
 - Testboot, dauerhafte Übernahme und Neustart getrennte Freigaben besitzen.
 - Nicht unterstützte Secure-Boot- und Bootkonstellationen zuverlässig gesperrt werden.
 - Die festgelegten Reproduktionsnachweise vorliegen.
+- Die zusätzlichen Lebenszyklusprüfungen B-01, W-01, S-01, R-01, P-01 und A-01 bestanden sind.
 - Keine kritischen Sicherheitsbefunde offen sind.
 
 **Planungsstand:** Die Entscheidungen sind als Entwurf festgelegt; ihre technische Machbarkeit und korrekte Umsetzung müssen die beschriebenen Nachweise erbringen. Dieses Repository veröffentlicht zunächst ausschließlich Planungsdokumente. Es wurde keine Anwendung implementiert, kein Kernel gebaut oder installiert und keine System- oder Bootkonfiguration geändert. Ein unabhängiges Architekturreview steht weiterhin aus; die Prüfmatrix beschreibt ausstehende Nachweise und keine bereits bestandenen Tests.

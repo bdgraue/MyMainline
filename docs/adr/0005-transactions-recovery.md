@@ -1,6 +1,6 @@
 # 0005 – Dauerhafte Vorgänge und konservative Recovery
 
-Status: vereinbarter Entwurf, noch nicht implementiert. Stand: 9. Oktober 2026.
+Status: vereinbarter Entwurf, noch nicht implementiert. Stand: 10. Oktober 2026.
 
 ## Kontext
 
@@ -17,3 +17,7 @@ Nur ausgewählte lokale Kernelpakete; fehlende Abhängigkeiten blockieren ohne a
 ## Grundlagen
 
 [Plan: Zustände und Recovery](../PLAN.md), [dpkg](https://manpages.debian.org/trixie/dpkg/dpkg.1.en.html), [Debian Policy](https://www.debian.org/doc/debian-policy/ch-maintainerscripts.html).
+
+## Unabhängige Wiederherstellung
+
+Journal und versioniertes Rettungsmanifest werden außerhalb SQLite erhalten und unabhängig vom Dienst lesbar. Schemawechsel benötigen eine ruhende überprüfte Transaktionsgrenze; laufende Paketoperationen werden nicht beendet. Datenbankrestore ersetzt keinen Zustandsabgleich. [ADR 0012](0012-recovery-lifecycle.md) und [Rettungsentwurf](../operations/rescue.md) präzisieren R-01/A-01.

@@ -1,6 +1,6 @@
 # Offene Nachweise, Entscheidungen und Risiken
 
-Stand: 9. Oktober 2026. Der Entwurf ist vereinbart, seine Machbarkeit noch nicht bewiesen. Keine Zeile dieser Tabelle ist ein bereits erledigter Test.
+Stand: 10. Oktober 2026. Der Entwurf ist vereinbart, seine Machbarkeit noch nicht bewiesen. Keine Zeile dieser Tabelle ist ein bereits erledigter Test.
 
 ## Vor Umsetzung beziehungsweise Freigabe zu klären
 
@@ -15,6 +15,12 @@ Stand: 9. Oktober 2026. Der Entwurf ist vereinbart, seine Machbarkeit noch nicht
 | Reproduzierbarkeit | Bytegleichheit einschließlich Headerhelfern und finalen Paketmetadaten | Zwei frische Builds mit archivierten öffentlichen Signaturinputs |
 | Vier Clients | Toolkit-/Rust-Kompatibilität, Paketierung, Pflege-/Barrierefreiheitsaufwand | Phase-0-Brückenversuche und gemeinsame Vertragsabnahme |
 | Lizenzierung | Vollständige Lizenztexte, Drittkomponenten, eventuelle spätere Übernahmen | Vor Veröffentlichung des jeweiligen Anwendungscodes prüfen und dokumentieren |
+| Erstbestätigung | Belastbare Vorab-Erfassung und Verknüpfung mit neuem Boot | B-01 vor Installationsfreigabe; aktuelle Sitzung allein genügt nicht |
+| Spätere Treiberupdates | Sichere Kooperation mit externem APT/DKMS ohne Schlüsselweitergabe oder Sperrrekursion | F-09/W-01; sonst betroffene Installationen gesperrt |
+| Speicher/Retention | Messbasierte Grenzen, tatsächliche Quoten/Inodes und Referenzschutz | F-10/S-01 bis Build-MVP; keine universellen geratenen Speicherwerte |
+| Unabhängige Rettung | Format, Parser und praktisch geprüfte Offline-Anleitung außerhalb SQLite | R-01 vor Installationsfreigabe |
+| Pflegezustand/Reserve | Aktualitätsgrenze, offizielle Metadaten und eindeutige Metapaketzuordnung | P-01; keine automatische Supportannahme oder Reservebeschaffung |
+| Anwendungsmigration/-entfernung | Ruhende Grenze, kompatible Wiederherstellung und persistenter Zugriffsschutz | A-01 vor Anwendungspaketfreigabe; keine automatische Löschung benötigter Daten |
 | Architekturreview | Unabhängige Prüfung steht aus | Kritische Befunde vor privilegierter Umsetzung klären |
 
 ## Bewusst akzeptierte Grenzen des Entwurfs

@@ -20,6 +20,9 @@ Das ist ein Angebot für Nutzer, die einen bestimmten Upstream-Kernel benötigen
 | [Architekturentscheidungen](docs/adr/README.md) | Gründe und Folgen der gewählten Verfahren |
 | [Validierung](docs/validation.md) | Machbarkeitsnachweise, Sicherheitstests, VM-Matrix und Releasekriterien |
 | [Offene Nachweise und Risiken](docs/risks.md) | Blocker, offene Festlegungen und Bedingungen für eine Freigabe |
+| [Betrieb und Lebenszyklus](docs/operations/lifecycle.md) | Erstbestätigung, spätere Treiberupdates, Speicher, Support und Anwendungspflege |
+| [Rettungsentwurf](docs/operations/rescue.md) | Geplanter Rettungspfad ohne Dienst und Datenbank; noch keine freigegebene Anleitung |
+| [Ergänzende Planprüfung](docs/research/plan-review.md) | Sechs übernommene Ergänzungen mit Herleitung und zugeordneten Nachweisen |
 | [Fachliches Glossar](CONTEXT.md) | Gemeinsame Bedeutung der zentralen Begriffe |
 
 ## Geplanter erster Umfang
@@ -29,6 +32,8 @@ Erste Installationsziele sind Ubuntu/Kubuntu 26.04 und Debian 13 auf amd64, mit 
 Ein unprivilegierter Verwaltungsdienst und ein kleiner privilegierter Broker bedienen vier getrennt installierbare Clients: CLI, TUI, Qt und GTK. Ein Build-MVP entsteht vor dem CLI-Verwaltungs-MVP; alle vier Clients gehören zum geplanten v0.1-Release. Fedora, Arch und weitere Boot-/Speicherverfahren folgen nach eigenen Nachweisen.
 
 Quellen werden kryptografisch geprüft. Builds verändern die produktive Bootumgebung nicht. Installation, Testboot, dauerhafter Standardwechsel und Neustart benötigen jeweils ausdrückliche Freigabe; ein bestätigter funktionsfähiger Rückfallkernel bleibt erhalten.
+
+Ein Distributionskernel samt Aktualisierungsmetapaket bleibt zusätzlich als Reserve erhalten. Neue Installationen ungepflegter Reihen brauchen eine konkrete Ausnahme; unbekannter Pflegezustand wird ausdrücklich angezeigt. Sicherheits- und Rückfallbedingungen gelten weiterhin.
 
 CPU-spezifische Compilerflags und das Entfernen von Treibern sind vorerst außerhalb des v0.1-Umfangs. Das schützt Portabilität und spätere Geräte-/Bootpfade. Für spätere ausdrücklich gewählte und geprüfte individuelle Profile bleibt diese Möglichkeit offen: [Begründung](docs/adr/0008-config-profiles.md).
 

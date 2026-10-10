@@ -1,6 +1,6 @@
 # Recherche und Herleitung
 
-Stand: 9. Oktober 2026. Die Recherche begründet den [Plan](../PLAN.md). Sie ist eine Dokumentations- und Quellcodeanalyse, kein ausgeführter Sicherheits-, Build- oder Bootnachweis.
+Stand: 10. Oktober 2026. Die Recherche begründet den [Plan](../PLAN.md). Sie ist eine Dokumentations- und Quellcodeanalyse, kein ausgeführter Sicherheits-, Build- oder Bootnachweis.
 
 ## Lesepfad
 
@@ -9,6 +9,7 @@ Stand: 9. Oktober 2026. Die Recherche begründet den [Plan](../PLAN.md). Sie ist
 | [Alternativen und Mainline](alternatives.md) | Gibt es den Anwendungsfall bereits? Fork oder Neuentwicklung? |
 | [Buildverfahren und Distributionen](build-platform.md) | Welche offiziellen Verfahren sind verwendbar, welche Grenzen bleiben? |
 | [Beobachtungen der Ausgangslage](observations.md) | Welche lokal lesend erkannten Stolpersteine beeinflussten den Entwurf? |
+| [Ergänzende Planprüfung](plan-review.md) | Welche Lücken wurden bei Erstbestätigung und späterem Betrieb erkannt und übernommen? |
 | [Quellenverzeichnis](sources.md) | Welche Primärquellen stützen die Feststellungen? |
 | [Entscheidungsprotokolle](../adr/README.md) | Welche Entscheidung folgt aus welchem Befund? |
 

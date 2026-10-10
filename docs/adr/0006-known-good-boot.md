@@ -1,6 +1,6 @@
 # 0006 – Rückfallnachweis vor Installation und getrennter Testboot
 
-Status: vereinbarter Entwurf, noch nicht implementiert. Stand: 9. Oktober 2026.
+Status: vereinbarter Entwurf, noch nicht implementiert. Stand: 10. Oktober 2026.
 
 ## Kontext
 
@@ -17,3 +17,7 @@ Einmalstart benötigt nachgewiesenen GRUB-Umgebungsspeicher und ein sichtbares R
 ## Grundlagen
 
 [Plan: Rückfallkernel und GRUB](../PLAN.md), [lokale Beobachtungen](../research/observations.md), [VM-Nachweise](../validation.md).
+
+## Präzisierung der Erstbestätigung
+
+Der laufende Kernel ist ohne vertrauenswürdige Vorab-Erfassung nur Kandidat. Ein geschützter Bootdateisatz wird vor einem manuellen Bestätigungsboot über den bestehenden geprüften Bootpfad erfasst; neuer Boot und Benutzerbestätigung müssen dazu passen. Seit dem Boot ersetzte Module oder initramfs dürfen nicht nachträglich als gestartet bestätigt werden. Geänderte Dateien entwerten betroffene Nachweise und Pläne; gültige vorhandene Nachweise sind revalidierbar. Der erste Bestätigungsboot setzt keinen bereits bestätigten Rückfallkernel voraus. Details und Grenzen: [Lebenszyklus 1](../operations/lifecycle.md), B-01.
